@@ -128,7 +128,7 @@ class LocationTests extends Specification {
         given: "an entity"
         def loc = "Cork"
         def e1 = locationRepository.save(new LocationEntity(loc))
-        when: "a valid call to addLocation is made"
+        when: "a valid call to findById is made"
         def except = mockMvc.perform(get("/api/location/findById?id=2")).andReturn().getResolvedException().getClass()
         then: "response status exception thrown"
         assert(except.is(ResponseStatusException))

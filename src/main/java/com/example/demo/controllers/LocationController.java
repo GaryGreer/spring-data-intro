@@ -49,7 +49,6 @@ public class LocationController {
         if (deleteLocation.isPresent()){
             locationService.deleteLocation(id);
             return new ResponseEntity<>("location deleted successfully.", headers, HttpStatus.NO_CONTENT);
-
         } else {
              throw new ResponseStatusException(HttpStatus.NOT_FOUND, "id not found.");
         }
