@@ -24,7 +24,7 @@ public class CarController {
     @Autowired CarService carService;
     @Autowired LocationRepository locationRepository;
 
-    @PutMapping(path = "/addCar")
+    @PutMapping(path = "/")
     public ResponseEntity<CarEntity> addCustomer(@RequestParam(value="name") String name,
                                                  @RequestParam(value="registration") String registration,
                                                  @RequestParam(value="manufacturer") String manufacturer,
@@ -33,35 +33,7 @@ public class CarController {
                                                  @RequestParam(value="category") String category,
                                                  @RequestParam(value="location_id") long location_id,
                                                  UriComponentsBuilder ucBuilder){
-
-        Category car_category = null;
-        Transmission car_transmission = null;
-
-        for (Category cat : Category.values()){
-            if (cat.toString().equalsIgnoreCase(category)){
-                car_category = cat;
-            }
-        }
-
-        for (Transmission tran : Transmission.values()){
-            if (tran.toString().equalsIgnoreCase(transmission)){
-                car_transmission = tran;
-            }
-        }
-
-        HttpHeaders headers = new HttpHeaders();
-        CarEntity newCar = carService.createCar(name, registration, manufacturer, model, car_transmission,
-                                                car_category, locationRepository.findById(location_id).get());
-        headers.setLocation(ucBuilder.path("/api/car/addCar/{name}").buildAndExpand(newCar.getName()).toUri());
-
-        if (car_category == null){
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "invalid category.");
-        }
-        else if (car_transmission == null){
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "invalid transmission.");
-        } else{
-            return new ResponseEntity<>(newCar, headers, HttpStatus.CREATED);
-        }
+        carService.createCar(name, registration, manufacturer, model, transmission, category, location_id);
     }
 
     @GetMapping(path = "/findById")

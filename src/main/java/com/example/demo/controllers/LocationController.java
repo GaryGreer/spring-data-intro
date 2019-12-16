@@ -5,11 +5,14 @@ import com.example.demo.services.LocationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.http.*;
 import org.springframework.web.server.ResponseStatusException;
-import java.util.Optional;
 import org.springframework.web.util.UriComponentsBuilder;
+
+import java.util.Optional;
 
 @RestController("/api/location")
 @RequestMapping(value = "/api/location")
