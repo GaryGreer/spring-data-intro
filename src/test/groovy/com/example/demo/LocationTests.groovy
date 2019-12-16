@@ -98,7 +98,7 @@ class LocationTests extends Specification {
         def e1 = locationRepository.save(new LocationEntity(loc))
         when: "a valid call to deleteLocation is made"
         def result = mockMvc.perform(delete("/api/location/{id}", 2)).andReturn().response.status
-        then: "result string confirms deletion"
+        then: "status code is 404"
         result == 404
     }
 
