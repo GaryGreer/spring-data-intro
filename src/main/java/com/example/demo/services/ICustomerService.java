@@ -3,14 +3,15 @@ package com.example.demo.services;
 import com.example.demo.entities.CustomerEntity;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.ResponseEntity;
 
-import java.util.Optional;
+import java.net.URI;
 
 public interface ICustomerService {
 
-    Optional<CustomerEntity> findById(Long id);
-    CustomerEntity createCustomer(String name);
-    void deleteCustomer(Long id);
+    ResponseEntity<CustomerEntity> findById(Long id);
+    ResponseEntity<URI> createCustomer(CustomerEntity customer);
+    ResponseEntity<String> deleteCustomer(Long id);
     Iterable<CustomerEntity> getAllCustomers();
-    Page<CustomerEntity> findAll(Pageable pageable);
+    Page findAll(Pageable pageable);
 }
