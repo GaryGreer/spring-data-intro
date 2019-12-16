@@ -1,15 +1,16 @@
 package com.example.demo.entities;
 
+import lombok.Getter;
 import javax.persistence.*;
+import java.util.Set;
 
 @javax.persistence.Entity
-@Table(name = "locations")
+@Table(name = "location")
 public class LocationEntity {
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
-    public long id;
-
-    private String location;
+    @Getter public long id;
+    @Getter private String location;
 
     public LocationEntity(){};
 
@@ -17,10 +18,6 @@ public class LocationEntity {
         this.location = location;
     }
 
-    public String getLocation() {
-        return location;
-    }
-    public long getId() {
-        return id;
-    }
+    @OneToMany(cascade = CascadeType.REMOVE, mappedBy = "location", fetch = FetchType.EAGER)
+    Set<CarEntity> cars;
 }

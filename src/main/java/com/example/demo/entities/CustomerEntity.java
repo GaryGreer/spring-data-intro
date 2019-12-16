@@ -1,15 +1,15 @@
 package com.example.demo.entities;
 
+import lombok.Getter;
 import javax.persistence.*;
 
 @javax.persistence.Entity
-@Table(name = "customers")
+@Table(name = "customer")
 public class CustomerEntity {
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
-    public long id;
-
-    private String name;
+    @Getter public long id;
+    @Getter private String name;
 
     public CustomerEntity(){};
 
@@ -17,10 +17,4 @@ public class CustomerEntity {
         this.name = name;
     }
 
-    public String getName() {
-        return name;
-    }
-    public long getId() {
-        return id;
-    }
 }
