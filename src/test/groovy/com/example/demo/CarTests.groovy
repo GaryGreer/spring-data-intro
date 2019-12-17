@@ -179,19 +179,17 @@ class CarTests extends Specification {
         def entity2 = new LocationEntity("Belfast")
         locationRepository.save(entity2)
         def car_json = '{"name": "Test Car 1", "registration": "192-KK-12345", "manufacturer": "Tesla", "model": "S", "transmission": "AUTOMATIC", "category": "ELECTRIC", "location": {"id": 1, "location": "Cork"}}'
-        def car_json1 = '{"name": "Test Car 2", "registration": "192-D-12345", "manufacturer": "Tesla", "model": "S", "transmission": "AUTOMATIC", "category": "ELECTRIC", "location": {"id": 1, "location": "Cork"}}'
-        def car_json2 = '{"name": "Test Car 2", "registration": "192-D-12345", "manufacturer": "Tesla", "model": "S", "transmission": "AUTOMATIC", "category": "ELECTRIC", "location": {"id": 2, "location": "Belfast"}}'
+        def car_json1 = '{"name": "Test Car 2", "registration": "192-G-12345", "manufacturer": "Tesla", "model": "S", "transmission": "AUTOMATIC", "category": "ELECTRIC", "location": {"id": 1, "location": "Cork"}}'
+        def car_json2 = '{"name": "Test Car 3", "registration": "192-D-12345", "manufacturer": "Tesla", "model": "S", "transmission": "AUTOMATIC", "category": "ELECTRIC", "location": {"id": 2, "location": "Belfast"}}'
         mockMvc.perform(post("/api/car/").contentType(MediaType.APPLICATION_JSON).content(car_json))
         mockMvc.perform(post("/api/car/").contentType(MediaType.APPLICATION_JSON).content(car_json1))
         mockMvc.perform(post("/api/car/").contentType(MediaType.APPLICATION_JSON).content(car_json2))
         when: "a valid call to listPageable is made"
-        def result = mockMvc.perform(get("/api/car/location/?{location}", "Belfast")).andReturn().response.contentAsString
-        print("Result -------------------->" + result)
+        def result = mockMvc.perform(get("/api/car/{id}/location", 1)).andReturn().response.contentAsString
         def json = new JsonSlurper().parseText(result)
-        then: "result verifies the returned pageable"
-        json.totalPages == 3
-        json.totalElements == 3
-        json.content[0].name == "Test Car 3"
-        json.content.size == 1
+        then: "result verifies the returned cars"
+        json[0].name == "Test Car 1"
+        json[1].name == "Test Car 2"
     }
+
 }

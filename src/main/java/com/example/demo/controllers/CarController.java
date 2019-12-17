@@ -36,7 +36,7 @@ public class CarController {
         return carService.findAll(pageable);
     }
 
-    @GetMapping(path = "/location/{id}")
+    @GetMapping(path = "/{id}/location")
     public List<CarEntity> carsLocation(@PathVariable("id") Long id){
         return carService.findByLocation(id);
     }

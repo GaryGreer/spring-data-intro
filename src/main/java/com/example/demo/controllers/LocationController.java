@@ -39,4 +39,9 @@ public class LocationController {
     public Page locationPageable(Pageable pageable){
        return locationService.findAll(pageable);
     }
+
+    @GetMapping(path = "/locations")
+    public ResponseEntity getLocations(){
+        return locationService.getAllLocations();
+    }
 }

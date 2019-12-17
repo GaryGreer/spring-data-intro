@@ -1,11 +1,12 @@
 package com.example.demo.entities;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Getter;
 
 import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
+
 
 @javax.persistence.Entity
 @NamedEntityGraph(
@@ -27,7 +28,7 @@ public class LocationEntity {
         this.location = location;
     }
 
-    @JsonManagedReference
+    @JsonIgnoreProperties("cars")
     @OneToMany(cascade = CascadeType.REMOVE, mappedBy = "location", fetch = FetchType.LAZY)
     @Getter private Set<CarEntity> cars = new HashSet<>();
 }

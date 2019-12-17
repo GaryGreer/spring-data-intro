@@ -2,7 +2,7 @@ package com.example.demo.entities;
 
 import com.example.demo.enums.Category;
 import com.example.demo.enums.Transmission;
-import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.OnDelete;
@@ -23,8 +23,8 @@ public class CarEntity {
     @Enumerated(EnumType.STRING) @Getter private Transmission transmission;
     @Enumerated(EnumType.STRING) @Getter private Category category;
 
-    @JsonBackReference
-    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    @JsonIgnoreProperties("cars")
+    @ManyToOne(optional = false)
     @JoinColumn(name = "location_id")
     @OnDelete(action = OnDeleteAction.CASCADE)
     @Getter @Setter private LocationEntity location;
@@ -41,7 +41,5 @@ public class CarEntity {
         this.transmission = transmission;
         this.category = category;
         this.location = location;
-        this.getLocation().getCars().add(this);
-
     }
 }

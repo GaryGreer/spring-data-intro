@@ -64,8 +64,8 @@ public class LocationService implements ILocationService, Serializable {
     }
 
     @Override
-    public Iterable<LocationEntity> getAllLocations() {
-        return locationRepository.findAll();
+    public ResponseEntity getAllLocations() {
+        return new ResponseEntity(locationRepository.findAll(), HttpStatus.OK);
     }
 
     @Override

@@ -11,6 +11,6 @@ public interface ILocationService {
     ResponseEntity<LocationEntity> findById(Long id, Boolean entity);
     ResponseEntity createLocation(LocationEntity location);
     ResponseEntity<String> deleteLocation(Long id) throws NotFoundException;
-    Iterable<LocationEntity> getAllLocations();
+    ResponseEntity getAllLocations();
     Page<LocationEntity> findAll(Pageable pageable);
 }
