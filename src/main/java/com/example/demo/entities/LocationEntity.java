@@ -1,11 +1,20 @@
 package com.example.demo.entities;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Getter;
+
 import javax.persistence.*;
+import java.util.HashSet;
 import java.util.Set;
 
 @javax.persistence.Entity
-@Table(name = "location")
+@NamedEntityGraph(
+        name = "location-entity-graph",
+        attributeNodes = {
+                @NamedAttributeNode("location")
+        }
+)
+@Table(name = "locations")
 public class LocationEntity {
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
@@ -18,6 +27,7 @@ public class LocationEntity {
         this.location = location;
     }
 
-    @OneToMany(cascade = CascadeType.REMOVE, mappedBy = "location", fetch = FetchType.EAGER)
-    Set<CarEntity> cars;
+    @JsonManagedReference
+    @OneToMany(cascade = CascadeType.REMOVE, mappedBy = "location", fetch = FetchType.LAZY)
+    @Getter private Set<CarEntity> cars = new HashSet<>();
 }

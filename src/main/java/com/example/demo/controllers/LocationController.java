@@ -8,8 +8,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Optional;
-
 @RestController("/api/location")
 @RequestMapping(value = "/api/location")
 public class LocationController {
@@ -23,7 +21,12 @@ public class LocationController {
 
     @GetMapping(path = "/{id}")
     public ResponseEntity<LocationEntity> findLocation(@PathVariable("id") Long id){
-        return locationService.findById(id);
+        return locationService.findById(id, false);
+    }
+
+    @GetMapping(path = "/{id}/entityGraph")
+    public ResponseEntity<LocationEntity> findLocationEntityGraph(@PathVariable("id") Long id){
+        return locationService.findById(id, true);
     }
 
 
