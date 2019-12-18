@@ -22,7 +22,7 @@ public class LocationEntity {
     @Getter public long id;
     @Getter private String location;
 
-    public LocationEntity(){};
+    public LocationEntity(){}
 
     public LocationEntity(String location) {
         this.location = location;

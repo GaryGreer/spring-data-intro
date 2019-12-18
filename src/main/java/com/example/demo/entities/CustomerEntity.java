@@ -11,7 +11,7 @@ public class CustomerEntity {
     @Getter public long id;
     @Getter private String name;
 
-    public CustomerEntity(){};
+    public CustomerEntity(){}
 
     public CustomerEntity(String name) {
         this.name = name;

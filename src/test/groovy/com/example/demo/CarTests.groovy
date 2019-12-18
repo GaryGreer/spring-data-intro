@@ -1,13 +1,11 @@
 package com.example.demo
 
+
 import com.example.demo.entities.CarEntity
 import com.example.demo.entities.LocationEntity
 import com.example.demo.enums.Category
 import com.example.demo.enums.Transmission
-import com.example.demo.repositories.CustomerRepository
 import com.example.demo.repositories.LocationRepository
-import com.example.demo.services.CarService
-import com.example.demo.services.LocationService
 import groovy.json.JsonSlurper
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
@@ -19,8 +17,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders
 import org.springframework.web.context.WebApplicationContext
 import spock.lang.Specification
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*
 
 @ContextConfiguration
 @SpringBootTest(classes = DemoApplication.class)
@@ -29,10 +26,7 @@ class CarTests extends Specification {
 
     MockMvc mockMvc
 
-    @Autowired CustomerRepository carRepository
-    @Autowired CarService carService
     @Autowired LocationRepository locationRepository
-    @Autowired LocationService locationService
     @Autowired WebApplicationContext context
 
     def setup() {
@@ -64,6 +58,7 @@ class CarTests extends Specification {
         loc_id == car.getLocation().getId()
     }
 
+
     def "CarController - REST - adding valid car test"() {
         given: "an entity"
         def entity = new LocationEntity("Cork")
@@ -75,7 +70,6 @@ class CarTests extends Specification {
         then: "result is the URL to find the new location"
         json == "http://localhost/api/car/1"
     }
-
     def "CarController - REST - adding invalid car test"() {
         given: "an entity"
         def entity = new LocationEntity("Cork")
@@ -127,6 +121,48 @@ class CarTests extends Specification {
         when: "an invalid call to findCar is made"
         def result = mockMvc.perform(get("/api/car/{id}", 2)).andReturn().response.status
         then: "status code is 404"
+        result == 404
+    }
+
+    def "CarController - REST - valid deleteById test"() {
+        given: "an entity"
+        def entity = new LocationEntity("Cork")
+        def name = "Test Car"
+        def id = 1
+        def registration = "192-kk-12345"
+        def manufacturer = "Tesla"
+        def model = "S"
+        def transmission = "AUTOMATIC"
+        def category = "ELECTRIC"
+        def location_id = 1
+        def location = "Cork"
+        locationRepository.save(entity)
+        def car_json = '{"name": "Test Car", "registration": "192-kk-12345", "manufacturer": "Tesla", "model": "S", "transmission": "AUTOMATIC", "category": "ELECTRIC", "location": {"id": 1, "location": "Cork"}}'
+        mockMvc.perform(post("/api/car/").contentType(MediaType.APPLICATION_JSON).content(car_json))
+        when: "a valid delete is made"
+        def result = mockMvc.perform(delete("/api/car/{id}", 1)).andReturn().response.contentAsString
+        then: "result string confirms deletion"
+        result == "car deleted successfully."
+    }
+
+    def "CarController - REST - invalid deleteById test"() {
+        given: "an entity"
+        def entity = new LocationEntity("Cork")
+        def name = "Test Car"
+        def id = 1
+        def registration = "192-kk-12345"
+        def manufacturer = "Tesla"
+        def model = "S"
+        def transmission = "AUTOMATIC"
+        def category = "ELECTRIC"
+        def location_id = 1
+        def location = "Cork"
+        locationRepository.save(entity)
+        def car_json = '{"name": "Test Car", "registration": "192-kk-12345", "manufacturer": "Tesla", "model": "S", "transmission": "AUTOMATIC", "category": "ELECTRIC", "location": {"id": 1, "location": "Cork"}}'
+        mockMvc.perform(post("/api/car/").contentType(MediaType.APPLICATION_JSON).content(car_json))
+        when: "a valid delete is made"
+        def result = mockMvc.perform(delete("/api/car/{id}", 2)).andReturn().response.status
+        then: "result string confirms deletion"
         result == 404
     }
 

@@ -4,11 +4,12 @@ import com.example.demo.enums.Category;
 import com.example.demo.enums.Transmission;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Getter;
-import lombok.Setter;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
 
 @javax.persistence.Entity
 @Table(name = "car")
@@ -27,9 +28,13 @@ public class CarEntity {
     @ManyToOne(optional = false)
     @JoinColumn(name = "location_id")
     @OnDelete(action = OnDeleteAction.CASCADE)
-    @Getter @Setter private LocationEntity location;
+    @Getter private LocationEntity location;
 
-    public CarEntity(){};
+    //@JsonIgnoreProperties("bookings")
+    @OneToMany(cascade = CascadeType.REMOVE, mappedBy = "car", fetch = FetchType.LAZY)
+    @Getter private Set<BookingEntity> bookings = new HashSet<>();
+
+    public CarEntity(){}
 
     public CarEntity(String name, String registration, String manufacturer,
                      String model, Transmission transmission, Category category,
