@@ -4,6 +4,9 @@ import com.example.demo.enums.Category;
 import com.example.demo.enums.Transmission;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
@@ -13,38 +16,26 @@ import java.util.Set;
 
 @javax.persistence.Entity
 @Table(name = "car")
+@NoArgsConstructor
+@RequiredArgsConstructor
+@Getter
 public class CarEntity {
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
-    @Getter public long id;
-    @Getter private String name;
-    @Getter private String registration;
-    @Getter private String manufacturer;
-    @Getter private String model;
-    @Enumerated(EnumType.STRING) @Getter private Transmission transmission;
-    @Enumerated(EnumType.STRING) @Getter private Category category;
+    public long id;
+    @NonNull private String name;
+    @NonNull private String registration;
+    @NonNull private String manufacturer;
+    @NonNull private String model;
+    @NonNull @Enumerated(EnumType.STRING) private Transmission transmission;
+    @NonNull @Enumerated(EnumType.STRING) private Category category;
 
     @JsonIgnoreProperties("cars")
     @ManyToOne(optional = false)
     @JoinColumn(name = "location_id")
     @OnDelete(action = OnDeleteAction.CASCADE)
-    @Getter private LocationEntity location;
+    @NonNull private LocationEntity location;
 
-    //@JsonIgnoreProperties("bookings")
     @OneToMany(cascade = CascadeType.REMOVE, mappedBy = "car", fetch = FetchType.LAZY)
-    @Getter private Set<BookingEntity> bookings = new HashSet<>();
-
-    public CarEntity(){}
-
-    public CarEntity(String name, String registration, String manufacturer,
-                     String model, Transmission transmission, Category category,
-                     LocationEntity location){
-        this.name = name;
-        this.registration = registration;
-        this.manufacturer = manufacturer;
-        this.model = model;
-        this.transmission = transmission;
-        this.category = category;
-        this.location = location;
-    }
+    private Set<BookingEntity> bookings = new HashSet<>();
 }

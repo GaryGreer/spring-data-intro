@@ -32,7 +32,7 @@ public class CarController {
     }
 
     @GetMapping(path = "/")
-    public Page carPageable(Pageable pageable){
+    public Page<CarEntity> carPageable(Pageable pageable){
         return carService.findAll(pageable);
     }
 
