@@ -30,12 +30,12 @@ public class BookingController {
     }
 
     @GetMapping(path = "/")
-    public Page bookingPageable(Pageable pageable){
+    public Page<BookingEntity> bookingPageable(Pageable pageable){
         return bookingService.findAll(pageable);
     }
 
     @GetMapping(path = "/today")
-    public Page todayBookings(Pageable pageable){
+    public Page<BookingEntity> todayBookings(Pageable pageable){
         return bookingService.findTodays(pageable);
     }
 }
