@@ -2,6 +2,9 @@ package com.example.demo.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 
 import javax.persistence.*;
 import java.util.HashSet;
@@ -15,18 +18,15 @@ import java.util.Set;
                 @NamedAttributeNode("location")
         }
 )
+@NoArgsConstructor
+@RequiredArgsConstructor
+@Getter
 @Table(name = "locations")
 public class LocationEntity {
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
-    @Getter public long id;
-    @Getter private String location;
-
-    public LocationEntity(){}
-
-    public LocationEntity(String location) {
-        this.location = location;
-    }
+    public long id;
+    @NonNull private String location;
 
     @JsonIgnoreProperties("cars")
     @OneToMany(cascade = CascadeType.REMOVE, mappedBy = "location", fetch = FetchType.LAZY)
