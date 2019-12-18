@@ -47,19 +47,25 @@ public class LocationService implements ILocationService, Serializable {
     }
 
     @Override
-    public ResponseEntity<LocationEntity> findById(Long id) {
+    public ResponseEntity<LocationEntity> findById(Long id, Boolean entity) {
 
-        Optional<LocationEntity> foundLocation = locationRepository.findById(id);
-        if (foundLocation.isPresent()){
-            return new ResponseEntity<>(foundLocation.get(), HttpStatus.OK);
-        } else{
-            throw new IdNotFoundException(id);
+        if (!entity){
+            Optional<LocationEntity> foundLocation = locationRepository.findById(id);
+            if (foundLocation.isPresent()){
+                return new ResponseEntity<>(foundLocation.get(), HttpStatus.OK);
+            } else{
+                throw new IdNotFoundException(id);
+            }
+        } else {
+            LocationEntity foundLocation = locationRepository.findOneById(id);
+            return new ResponseEntity<>(foundLocation, HttpStatus.OK);
         }
+
     }
 
     @Override
-    public Iterable<LocationEntity> getAllLocations() {
-        return locationRepository.findAll();
+    public ResponseEntity getAllLocations() {
+        return new ResponseEntity(locationRepository.findAll(), HttpStatus.OK);
     }
 
     @Override

@@ -21,8 +21,14 @@ public class LocationController {
 
     @GetMapping(path = "/{id}")
     public ResponseEntity<LocationEntity> findLocation(@PathVariable("id") Long id){
-        return locationService.findById(id);
+        return locationService.findById(id, false);
     }
+
+    @GetMapping(path = "/{id}/entityGraph")
+    public ResponseEntity<LocationEntity> findLocationEntityGraph(@PathVariable("id") Long id){
+        return locationService.findById(id, true);
+    }
+
 
     @DeleteMapping(path = "/{id}")
     public ResponseEntity<String> deleteLocation(@PathVariable("id") Long id){
@@ -32,5 +38,10 @@ public class LocationController {
     @GetMapping(path = "/")
     public Page locationPageable(Pageable pageable){
        return locationService.findAll(pageable);
+    }
+
+    @GetMapping(path = "/locations")
+    public ResponseEntity getLocations(){
+        return locationService.getAllLocations();
     }
 }
