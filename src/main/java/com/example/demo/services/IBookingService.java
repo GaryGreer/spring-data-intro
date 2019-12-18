@@ -14,4 +14,5 @@ public interface IBookingService {
     ResponseEntity<String> deleteBooking(Long id);
     Iterable<BookingEntity> getAllBookings();
     Page findAll(Pageable pageable);
+    Page findTodays(Pageable pageable);
 }

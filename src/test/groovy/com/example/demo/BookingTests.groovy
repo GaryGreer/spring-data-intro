@@ -413,4 +413,66 @@ class BookingTests extends Specification {
         json.content.size == 1
     }
 
+    def "BookingController - REST - Todays Bookings Pageable"() {
+        given: "an entity"
+        def entity = new LocationEntity("Cork")
+        locationRepository.save(entity)
+
+        def name = "Gary"
+        def customer = new CustomerEntity(name)
+        customerRepository.save(customer)
+
+        def name1 = "Michael"
+        def customer1 = new CustomerEntity(name1)
+        customerRepository.save(customer1)
+
+        def name2 = "Victoria"
+        def customer2 = new CustomerEntity(name2)
+        customerRepository.save(customer2)
+
+        def car_name = "Test Car"
+        def reg = "12345"
+        def manufacturer = "Ford"
+        def model = "Fiesta"
+        def transmission = Transmission.MANUAL
+        def category = Category.DIESEL
+        def car = new CarEntity(car_name, reg, manufacturer, model, transmission, category, entity)
+        def car1 = new CarEntity(car_name, reg, manufacturer, model, transmission, category, entity)
+        def car2 = new CarEntity(car_name, reg, manufacturer, model, transmission, category, entity)
+        carRepository.save(car)
+        carRepository.save(car1)
+        carRepository.save(car2)
+
+        def start = LocalDate.now()
+        def end = start.plusDays(1)
+        def end1 = start.plusDays(3)
+        def end2 = start.plusDays(10)
+        def booking = new BookingEntity(start, end, car, customer)
+        def booking1 = new BookingEntity(start, end1, car1, customer1)
+        def booking2 = new BookingEntity(start, end2, car2, customer2)
+        bookingRepository.save(booking)
+        bookingRepository.save(booking1)
+        bookingRepository.save(booking2)
+
+        when: "a valid call to display todays bookings is made"
+        def result = mockMvc.perform(get("/api/booking/today/?page=0&size=3&sort=customer,asc")).andReturn().response.contentAsString
+        def json = new JsonSlurper().parseText(result)
+        then: "result verifies the returned pageable"
+        json.totalPages == 1
+        json.totalElements == 3
+        json.content[0].startDate == start.toString()
+        json.content[0].endDate == end.toString()
+        json.content[0].car.id == car.getId()
+        json.content[0].customer.name == customer.getName()
+        json.content[1].startDate == start.toString()
+        json.content[1].endDate == end1.toString()
+        json.content[1].car.id == car1.getId()
+        json.content[1].customer.name == customer1.getName()
+        json.content[2].startDate == start.toString()
+        json.content[2].endDate == end2.toString()
+        json.content[2].car.id == car2.getId()
+        json.content[2].customer.name == customer2.getName()
+        json.content.size == 3
+    }
+
 }

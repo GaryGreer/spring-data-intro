@@ -33,4 +33,9 @@ public class BookingController {
     public Page bookingPageable(Pageable pageable){
         return bookingService.findAll(pageable);
     }
+
+    @GetMapping(path = "/today")
+    public Page todayBookings(Pageable pageable){
+        return bookingService.findTodays(pageable);
+    }
 }

@@ -21,6 +21,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.net.URI;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -89,5 +90,8 @@ public class BookingService implements IBookingService {
         return bookingRepository.findAll(pageable);
     }
 
-
+    @Override
+    public Page findTodays(Pageable pageable) {
+        return bookingRepository.findAllByStartDate(LocalDate.now(), pageable);
+    }
 }
